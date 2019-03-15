@@ -1,0 +1,29 @@
+FROM amazonlinux:2017.03.1.20170812
+
+ARG cryptography_version=2.6.1
+
+WORKDIR /app
+
+# Install requirements
+RUN yum install -y \
+  python36 \
+  python36-devel \
+  gzip \
+  tar \
+  gcc
+
+# Get cryptograph source
+RUN curl https://files.pythonhosted.org/packages/07/ca/bc827c5e55918ad223d59d299fff92f3563476c3b00d0a9157d9c0217449/cryptography-2.6.1.tar.gz \
+  -o cryptography-${cryptography_version}.tar.gz
+
+# Unzip
+RUN tar xzf cryptography-${cryptography_version}.tar.gz
+
+RUN mkdir /app/cryptography-py36 && \
+    cp -r /app/cryptography-${cryptography_version}/* /app/cryptography-py36/ 
+
+# Build psycopg for python 3.7
+WORKDIR /app/cryptography-py36
+RUN cp -r /app/cryptography-${psycopg2_version}/* ./
+RUN /usr/bin/python36 setup.py build_ext
+ 

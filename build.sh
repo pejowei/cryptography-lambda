@@ -7,7 +7,7 @@ indent() { sed 's/^/    /'; }
 rm -rf $DEST_PY36
 mkdir -p $DEST_PY36
 
-docker build -t psycopg2-py27-py36 \
+docker build --tag=cryptography-py36 \
              --build-arg cryptography_version=$CRYPTOGRAPHY_VERSION \
              --no-cache \
              -f Dockerfile-py36 . | indent
@@ -15,7 +15,7 @@ docker build -t psycopg2-py27-py36 \
 # Get py36 versions
 id=$(docker create cryptography-py36)
 
-docker cp $id:/app/cryptography-py36/build/lib.linux-x86_64-3.6/cryptography/. $DEST_PY36 | indent
-docker cp $id:/app/cryptography-py36/lib/. $DEST_PY36 | indent
+docker cp $id:/app/cryptography-py36/cryptography/. $DEST_PY36 | indent
+# docker cp $id:/app/cryptography-py36/lib/. $DEST_PY36 | indent
 
 docker rm -v $id | indent
